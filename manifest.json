@@ -1,0 +1,43 @@
+{
+"update_url": "https://clients2.google.com/service/update2/crx",
+
+  "manifest_version": 3,
+  "name": "MBLX-Hitbox-color-changer",
+  "version": "1.2.10",
+  "description": "A browser extension to mod an online game. This program was created by combining footage from SmoothDude's videos.",
+  "author": "ZataLove_JP_Kohaku, SmoothDude, joudaALT, Mystic",
+  "background": {"service_worker": "background.js"},
+  "icons": {
+    "128": "MBLX_TP_icon.png"
+  },
+  "permissions": [
+   "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "https://miniblox.io/*",
+    "https://miniblox.online/*",
+    "https://miniblox.org/*",
+    "https://raw.githubusercontent.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://miniblox.io/*",
+        "https://miniblox.online/*",
+        "https://miniblox.org/*"
+      ],
+      "js": ["inject.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://miniblox.io/*",
+        "https://miniblox.online/*",
+        "https://miniblox.org/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
