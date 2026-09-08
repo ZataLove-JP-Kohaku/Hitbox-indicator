@@ -16,7 +16,6 @@
   "host_permissions": [
     "https://miniblox.io/*",
     "https://miniblox.online/*",
-    "https://miniblox.org/*",
     "https://raw.githubusercontent.com/*"
   ],
   "content_scripts": [
