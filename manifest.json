@@ -3,15 +3,23 @@
 
   "manifest_version": 3,
   "name": "MBLX-Hitbox-color-changer",
-  "version": "1.8.10",
-  "description": "This mod changes the color of entity hitboxes in Miniblox. It was created based on the 'Combat Hitbox' in Minecraft.",
+  "version": "1.10.0",
+  "description": "A browser extension to mod an online game. This program was created by combining footage from SmoothDude's videos.",
   "author": "ZataLove_JP_Kohaku",
   "icons": {
     "128": "MBLX_TP_icon.png"
   },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MBLX Hitbox Color Changer"
+  },
+  "permissions": [
+    "storage"
+  ],
   "host_permissions": [
     "https://miniblox.io/*",
     "https://miniblox.online/*",
+    "https://www.xbitlabs.com/ja/*", 
     "https://miniblox.org/*"
   ],
   "content_scripts": [
@@ -19,6 +27,7 @@
       "matches": [
         "https://miniblox.io/*",
         "https://miniblox.online/*",
+        "https://www.xbitlabs.com/ja/*", 
         "https://miniblox.org/*"
       ],
       "js": ["inject.js"],
@@ -29,6 +38,7 @@
       "matches": [
         "https://miniblox.io/*",
         "https://miniblox.online/*",
+        "https://www.xbitlabs.com/ja/*", 
         "https://miniblox.org/*"
       ],
       "js": ["content.js"],
