@@ -4,6 +4,18 @@
 // scripts share the page's Web Storage even though their JS globals
 // are isolated). Draws a small settings panel so Hitbox/Debug Color
 // can be toggled without opening devtools.
+//
+// There used to be a gear button (bottom-right) you clicked to open
+// this panel. That's gone now — instead, the keybind that opens this
+// panel is set from the extension's own toolbar popup (popup.html/
+// popup.js), which appears right under the extension's icon rather
+// than anywhere on the Miniblox page itself. Because that popup is a
+// separate chrome-extension:// page, it can't see this page's
+// localStorage — so the keybind specifically lives in
+// chrome.storage.local instead (shared between the popup and this
+// script), while the color/enabled settings below stay in localStorage
+// as before. The stored value is e.code (see popup.js for why), so the
+// comparison below also uses e.code.
 
 (function () {
     'use strict';
@@ -17,6 +29,13 @@
         miniblox_hitboxdebugcolor_reach: '#ff0000'
     };
 
+    const KEYBIND_STORAGE_KEY = 'miniblox_hitboxpanel_keybind';
+
+    // Cached locally and kept in sync via chrome.storage.onChanged below,
+    // since chrome.storage.local is async and the keydown handler needs
+    // a synchronous read.
+    let cachedKeybind = '';
+
     function getSetting(key) {
         return localStorage.getItem(key) ?? DEFAULTS[key];
     }
@@ -28,27 +47,9 @@
     function injectStyles() {
         const style = document.createElement('style');
         style.textContent = `
-            #mbtp-toggle {
-                position: fixed;
-                bottom: 16px;
-                right: 16px;
-                z-index: 2147483647;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                background: rgba(20, 20, 24, 0.85);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                color: #fff;
-                font-size: 18px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: sans-serif;
-            }
             #mbtp-panel {
                 position: fixed;
-                bottom: 64px;
+                bottom: 16px;
                 right: 16px;
                 z-index: 2147483647;
                 width: 260px;
@@ -151,22 +152,34 @@
     function mount() {
         injectStyles();
 
-        const toggle = document.createElement('button');
-        toggle.id = 'mbtp-toggle';
-        toggle.title = 'MBLX Hitbox Color Changer settings';
-        toggle.textContent = '⚙';
-
         const panel = buildPanel();
         syncPanelFromSettings(panel);
         wirePanel(panel);
+        document.documentElement.appendChild(panel);
 
-        toggle.addEventListener('click', () => {
+        chrome.storage.local.get(KEYBIND_STORAGE_KEY, (result) => {
+            cachedKeybind = result[KEYBIND_STORAGE_KEY] || '';
+        });
+
+        chrome.storage.onChanged.addListener((changes, area) => {
+            if (area === 'local' && KEYBIND_STORAGE_KEY in changes) {
+                cachedKeybind = changes[KEYBIND_STORAGE_KEY].newValue || '';
+            }
+        });
+
+        // The bound key toggles the settings panel — this replaces the
+        // old gear button's click handler. Skipped while typing
+        // anywhere else (chat box, etc.), so a bound letter/number key
+        // doesn't fight with normal typing.
+        document.addEventListener('keydown', (e) => {
+            const tag = e.target?.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target?.isContentEditable) return;
+
+            if (!cachedKeybind || e.code !== cachedKeybind) return;
+
             panel.classList.toggle('open');
             if (panel.classList.contains('open')) syncPanelFromSettings(panel);
         });
-
-        document.documentElement.appendChild(toggle);
-        document.documentElement.appendChild(panel);
     }
 
     if (document.readyState === 'loading') {
