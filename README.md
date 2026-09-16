@@ -1,2 +1,2 @@
 # Hitbox-indicator
-A browser extension to mod an online game. This program was created by combining footage from SmoothDude's videos.
+This mod changes the color of entity hitboxes in Miniblox. It was created based on the 'Combat Hitbox' in Minecraft.
