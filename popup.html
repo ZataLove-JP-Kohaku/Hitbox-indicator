@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>MBLX Hitbox Color Changer</title>
+<style>
+    body {
+        margin: 0;
+        width: 260px;
+        background: rgba(20, 20, 24, 0.97);
+        color: #eee;
+        font-family: sans-serif;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+    h3 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        padding-bottom: 8px;
+    }
+    p {
+        margin: 0 0 12px;
+        font-size: 12px;
+        color: #aaa;
+        line-height: 1.4;
+    }
+    #bind-input {
+        width: 100%;
+        box-sizing: border-box;
+        background: rgba(255, 255, 255, 0.06);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        color: #fff;
+        font-size: 14px;
+        padding: 10px;
+        text-align: center;
+        margin-bottom: 12px;
+        outline: none;
+        cursor: default;
+    }
+    #bind-input.listening {
+        border-color: #4da3ff;
+    }
+    button {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 6px;
+        color: #eee;
+        padding: 8px 0;
+        cursor: pointer;
+        font-size: 13px;
+    }
+    button:hover {
+        background: rgba(255, 255, 255, 0.16);
+    }
+</style>
+</head>
+<body>
+    <h3>Settings-Panel Keybind</h3>
+    <p>Click the box, then press a key. It saves right away — this is the key that opens/closes the hitbox settings panel in-game.</p>
+    <input id="bind-input" type="text" readonly />
+    <button id="unbind-btn">Unbind</button>
+    <script src="popup.js"></script>
+</body>
+</html>
